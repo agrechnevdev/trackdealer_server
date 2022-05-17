@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="1" author="agrechnev">
+        <!--<preConditions onFail="MARK_RAN">-->
+            <!--<not>-->
+                <!--<tableExists schemaName="d3198uhkqd6rtt" tableName="profile"/>-->
+            <!--</not>-->
+            <!--<not>-->
+                <!--<tableExists schemaName="d3198uhkqd6rtt" tableName="cookie"/>-->
+            <!--</not>-->
+            <!--<not>-->
+                <!--<tableExists schemaName="d3198uhkqd6rtt" tableName="period"/>-->
+            <!--</not>-->
+            <!--<not>-->
+                <!--<tableExists schemaName="d3198uhkqd6rtt" tableName="track"/>-->
+            <!--</not>-->
+            <!--<not>-->
+                <!--<tableExists schemaName="d3198uhkqd6rtt" tableName="userlike"/>-->
+            <!--</not>-->
+        <!--</preConditions>-->
+        <createTable tableName="profile">
+            <column name="id" type="int">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="username" type="varchar(255)"/>
+            <column name="password" type="varchar(255)"/>
+            <column name="email" type="varchar(255)"/>
+            <column name="name" type="varchar(255)"/>
+            <column name="date_registration" type="timestamp"/>
+            <column name="language" type="varchar(255)"/>
+            <column name="status" type="varchar(255)"/>
+        </createTable>
+
+        <createTable tableName="cookie">
+            <column name="id" type="int">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="session_id" type="varchar(255)"/>
+            <column name="password" type="varchar(255)"/>
+            <column name="data" type="varchar(255)"/>
+            <column name="user_id" type="int"/>
+        </createTable>
+
+        <createTable tableName="track">
+            <column name="id" type="int">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="user_load_id" type="int"/>
+            <column name="deezer_id" type="int"/>
+            <column name="title" type="varchar(255)"/>
+            <column name="artist" type="varchar(255)"/>
+            <column name="cover_image" type="varchar(255)"/>
+            <column name="genre" type="varchar(255)"/>
+            <column name="duration" type="int"/>
+            <column name="count_like" type="int"/>
+            <column name="count_dislike" type="int"/>
+            <column name="finish_date" type="timestamp"/>
+            <column name="user_finish_id" type="int"/>
+        </createTable>
+
+        <createTable tableName="userlike">
+            <column name="id" type="int">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="track_id" type="int"/>
+            <column name="user_id" type="int"/>
+            <column name="user_like" type="boolean"/>
+        </createTable>
+
+        <createTable tableName="period">
+            <column name="id" type="int">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="date_end" type="timestamp"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="cookie"
+                                 baseColumnNames="user_id"
+                                 constraintName="cookie_user_id_fk"
+                                 referencedTableName="profile"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="track"
+                                 baseColumnNames="user_load_id"
+                                 constraintName="track_user_id_fk"
+                                 referencedTableName="profile"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="track"
+                                 baseColumnNames="user_finish_id"
+                                 constraintName="track_user_finish_fk"
+                                 referencedTableName="profile"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="userlike"
+                                 baseColumnNames="track_id"
+                                 constraintName="userlike_track_id_fk"
+                                 referencedTableName="track"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="userlike"
+                                 baseColumnNames="user_id"
+                                 constraintName="userlike_user_id_fk"
+                                 referencedTableName="profile"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>
